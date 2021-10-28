@@ -1,0 +1,19 @@
+apiVersion : v1
+kind: Pod
+metadata:
+  name: my-app
+  labels:
+    app: main
+    owner: BohdanMarti
+    env: prod
+spec:
+  containers:
+    - name : container-my-web
+      image: vitalinka/k8sapp:latest
+      ports:
+        - containerPort: 80
+
+    - name : container-my-nginx
+      image: nginx:latest
+      ports:
+        - containerPort: 8080
