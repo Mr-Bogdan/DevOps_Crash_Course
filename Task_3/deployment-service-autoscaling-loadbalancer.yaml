@@ -1,0 +1,66 @@
+# Deployment
+apiVersion : apps/v1
+kind: Deployment
+metadata:
+  name: my-app-deployment
+  labels:
+    app: web-my-app
+    owner: BohdanMarti
+    env: depl
+spec:
+
+  selector:
+    matchLabels:
+      project: marti
+  template:
+    metadata:
+      labels:
+        project: marti  # Service will look for those PODS labels
+    spec:
+      containers:
+        - name: marti-web
+          image: vitalinka/k8sapp:latest
+          ports:
+            - containerPort: 80
+
+# Autoscaling
+---
+apiVersion: autoscaling/v2beta1
+kind: HorizontalPodAutoscaler
+metadata:
+  name: my-autoscalong
+spec:
+  scaleTargetRef:
+    apiVersion: apps/v2beta1v1
+    kind: Deployment
+    name: my-app-deployment-autoscaling
+  minReplicas: 2
+  maxReplicas: 4
+  metrics:
+    - type: Resource
+      resource:
+        name: cpu
+        targetAverageUtilization: 70
+    - type: Resource
+      resource:
+        name: memory
+        targetAverageUtilization: 80
+
+# LoadBalancer
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: my-multi-pods-service
+  labels:
+    env: serv
+    owner: BohdanMarti
+spec:
+  type: LoadBalancer
+  selector:
+    project: marti    # Selecting PODS with whose Labelss
+  ports:
+    - name      : app-my-web
+      protocol  : TCP
+      port      : 80       # Port on Load Balancer
+      targetPort: 80       # Port on POD
