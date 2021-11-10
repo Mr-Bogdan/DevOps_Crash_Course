@@ -1,0 +1,22 @@
+<html>
+<script>
+
+function myFunction() {
+    var xhttp = new XMLHttpRequest();
+    xhttp.onreadystatechange = function() {
+        if (this.readyState == 4 && this.status == 200) {
+        document.getElementById("my-demo").innerHTML = this.responseText;
+        }
+    };
+    xhttp.open("GET", "https://hbbc06qqgl.execute-api.eu-central-1.amazonaws.com/default/marti-Lambda-func", true);
+    xhttp.send();
+
+}
+
+</script>
+<body><div align="center"><br><br><br><br>
+<h1>Hello <span id="my-demo">WORLD!</span></h1>
+<button onclick="myFunction()">Click me</button><br>
+<img src="https://marti-bucket.s3.eu-central-1.amazonaws.com/for_s3_bucket.jpg"></div>
+</body>
+</html>
